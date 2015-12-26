@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [ -z "$OBJFS_ROOT" ]; then
+	echo "mkobj: the environment variable 'OBJFS_ROOT' must be set and non-empty"
+	exit
+fi
+
+while :; do
+	OBJ_PATH="$OBJFS_ROOT/obj/$(uuidgen)"
+	if [ ! -d "$OBJ_PATH" ]; then
+		mkdir -p "$OBJ_PATH"
+		echo "$OBJ_PATH"
+		break
+	fi
+done

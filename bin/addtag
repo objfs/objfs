@@ -1,0 +1,18 @@
+#!/bin/bash
+
+if [ -z "$1" -o -z "$2" ]; then
+	echo "addtag: missing operand"
+	echo "Usage: addtag OBJECT_ID TAG"
+	exit
+fi
+if [ -z "$OBJFS_ROOT" ]; then
+	echo "addtag: the environment variable 'OBJFS_ROOT' must be set and non-empty"
+	exit
+fi
+
+OBJ_TAG_DIR="$OBJFS_ROOT/obj-tag/$1"
+mkdir -p "$OBJ_TAG_DIR"
+>"$OBJ_TAG_DIR/$2"
+TAG_OBJ_DIR="$OBJFS_ROOT/tag-obj/$2"
+mkdir -p "$TAG_OBJ_DIR"
+>"$TAG_OBJ_DIR/$1"

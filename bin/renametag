@@ -1,0 +1,20 @@
+#!/bin/bash
+
+if [ -z "$1" -o -z "$2" ]; then
+	echo "renametag: missing operand"
+	echo "Usage: renametag OLD_TAG_NAME NEW_TAG_NAME"
+	exit
+fi
+if [ -z "$OBJFS_ROOT" ]; then
+	echo "renametag: the environment variable 'OBJFS_ROOT' must be set and non-empty"
+	exit
+fi
+
+shopt -s nullglob dotglob
+
+for FILE in "$OBJFS_ROOT/tag-obj/$1/"*; do
+	if [[ "$FILE" =~ ([^/]+)$ ]]; then
+		mv "$OBJFS_ROOT/obj-tag/${BASH_REMATCH[1]}/$1" "$OBJFS_ROOT/obj-tag/${BASH_REMATCH[1]}/$2"
+	fi
+done
+mv "$OBJFS_ROOT/tag-obj/$1" "$OBJFS_ROOT/tag-obj/$2"

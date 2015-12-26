@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+	echo "rmobj: missing operand"
+	echo "Usage: rmobj OBJECT_ID"
+	exit
+fi
+if [ -z "$OBJFS_ROOT" ]; then
+	echo "rmobj: the environment variable 'OBJFS_ROOT' must be set and non-empty"
+	exit
+fi
+
+shopt -s nullglob dotglob
+
+for FILE in "$OBJFS_ROOT/obj-tag/$1/"*; do
+	if [[ "$FILE" =~ ([^/]+)$ ]]; then
+		rm "$OBJFS_ROOT/tag-obj/${BASH_REMATCH[1]}/$1"
+		rm -d "$OBJFS_ROOT/tag-obj/${BASH_REMATCH[1]}" 2>/dev/null
+		rm "$FILE"
+	fi
+done
+rm -d "$OBJFS_ROOT/obj-tag/$1"
+rm -rf "$OBJFS_ROOT/obj/$1"

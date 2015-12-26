@@ -1,0 +1,22 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+	echo "rmtag: missing operand"
+	echo "Usage: rmtag TAG"
+	exit
+fi
+if [ -z "$OBJFS_ROOT" ]; then
+	echo "rmtag: the environment variable 'OBJFS_ROOT' must be set and non-empty"
+	exit
+fi
+
+shopt -s nullglob dotglob
+
+for FILE in "$OBJFS_ROOT/tag-obj/$1/"*; do
+	if [[ "$FILE" =~ ([^/]+)$ ]]; then
+		rm "$OBJFS_ROOT/obj-tag/${BASH_REMATCH[1]}/$1"
+		rm -d "$OBJFS_ROOT/obj-tag/${BASH_REMATCH[1]}" 2>/dev/null
+		rm "$FILE"
+	fi
+done
+rm -d "$OBJFS_ROOT/tag-obj/$1"
